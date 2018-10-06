@@ -15,8 +15,12 @@ int DRIVE = 137;
 int roombaRX = 10, roombaTX = 11; //these are the pins that will transmit and recieve data from the Roomba
 SoftwareSerial roombaSerial(roombaRX,roombaTX);
 
-int Xaxis = 0; //This value represents the recieved X value (0 to 30)
-int Yaxis = 0; //This value represents the recieved Y value
+char Xaxis = 0; //This value represents the recieved X value (0 to 30)
+char Yaxis = 0; //This value represents the recieved Y value
+bool button_1 = 0;
+bool button_2 = 0;
+bool button_3 = 0;
+bool button_4 = 0;
 int inNum; //This holds the recieved byte from the Xbee
 
 bool Active = true;
@@ -41,10 +45,18 @@ void setup() {
 void loop() {
   //The laptop-xbee-remote combination, or control station, will transmit bytes to the roomba that contain information on the state of the remote
 
-  while(Serial.available() > 1){ //if there is new data from the control station, interpret it
+  if(Serial.available() > 2){ //if there is new data from the control station, interpret it
     
     Xaxis = Serial.read();  //get the value
     Yaxis = Serial.read();
+    button_1 = Serial.read();
+    Serial.print("X Axis:  ");
+    Serial.print(Xaxis);
+    Serial.print("Y Axis: ");
+    Serial.print(Yaxis);
+    Serial.print("Button 1:  ");
+    Serial.print(button_1);
+    Serial.println();
     if(Xaxis == 255){
         Active = false;
         roombaSerial.write(139); //LEDS
